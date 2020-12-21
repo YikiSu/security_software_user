@@ -23,6 +23,8 @@ software usage status (2010 or 2012), the geographical location of the
 respondent, whether security software is used (free versions or paid
 versions), income level of the respondents and etc.
 
+# References
+
 <div id="refs" class="references csl-bib-body hanging-indent">
 
 <div id="ref-data" class="csl-entry">

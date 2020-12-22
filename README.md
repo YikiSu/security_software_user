@@ -23,6 +23,24 @@ software usage status (2010 or 2012), the geographical location of the
 respondent, whether security software is used (free versions or paid
 versions), income level of the respondents and etc.
 
+## Usage
+
+The replication of this project can be done by installing the following
+dependencies and running the following command from the root directory
+of this project to unzip the data:
+
+Using `R`:
+
+`Rscript script/download_data.R --url="https://www150.statcan.gc.ca/n1/tbl/csv/22100010-eng.zip" --out_path="data"`
+
+The data file will be saved in a folder called `data`.
+
+## Dependencies
+
+-   R version 3.6.1 and R packages:
+
+    -   docopt==0.7.1
+
 # References
 
 <div id="refs" class="references csl-bib-body hanging-indent">

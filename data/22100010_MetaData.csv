@@ -1,0 +1,64 @@
+﻿"Cube Title","Product Id","CANSIM Id",URL,"Cube Notes","Archive Status",Frequency,"Start Reference Period","End Reference Period","Total number of dimensions",Universe,"Variable List"
+"Internet security software use, by household income, age group and level of education",22100010,358-0170,"https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2210001001",1;2;3;6,"CURRENT - a cube available to the public and that is current",Occasional,2010-01-01,2012-01-01,5,,
+
+"Dimension ID","Dimension name","Dimension Notes","Dimension Correction Notes","Dimension Definitions"
+1,Geography,,,
+2,"Security software use",,,
+3,"Household income quartile",4;5,,
+4,"Age group",,,
+5,"Level of education",7,,
+
+"Dimension ID","Member Name","Classification Code","Member ID","Parent Member ID",Terminated,"Member Notes","Member Correction Notes","Member Geo Attribute Keys","Member Definitions"
+1,Canada,[11124],1,,,,,,
+2,"Internet users that currently use security software",,1,,,,,,
+2,"Internet users that currently use free versions of security software",,2,1,,,,,
+3,"Total, household income quartiles",,1,,,,,,
+3,"Lowest quartile household income",,2,1,,,,,
+3,"Second quartile household income",,3,1,,,,,
+3,"Third quartile household income",,4,1,,,,,
+3,"Highest quartile household income",,5,1,,,,,
+4,"Total, Internet users aged 16 years and over",,1,,,,,,
+4,"Internet users aged 16 to 24 years",,2,1,,,,,
+4,"Internet users aged 25 to 44 years",,3,1,,,,,
+4,"Internet users aged 45 to 64 years",,4,1,,,,,
+4,"Internet users aged 65 years and over",,5,1,,,,,
+5,"Total, level of education",,1,,,,,,
+5,"High school or less",,2,1,,,,,
+5,"College, trades, or some university",,3,1,,,,,
+5,"Bachelor's degree or higher",,4,1,,,,,
+
+Symbol Legend
+Description,Symbol
+"not available for a specific reference period",..
+"less than the limit of detection",<LOD
+"value rounded to 0 (zero) where there is a meaningful distinction between true zero and the value that was rounded",0s
+"data quality: excellent",A
+"data quality: very good",B
+"data quality: good",C
+"data quality: acceptable",D
+"use with caution",E
+"too unreliable to be published.",F
+"not applicable",...
+preliminary,p
+revised,r
+"suppressed to meet the confidentiality requirements of the Statistics Act",x
+terminated,t
+
+"Survey Code","Survey Name"
+4432,"Canadian Internet Use Survey"
+
+"Subject Code","Subject Name"
+22,"Information and communications technology "
+
+"Note ID",Note
+1,"Percentage of all individuals aged 16 years old and over who responded to have used the Internet for personal non business use in the past twelve months from any location."
+2,"The Canadian Internet Use Survey was redesigned in 2010 and its findings should not be compared with those from previous surveys."
+3,"The 2010 and 2012 series of Canadian Internet use tables replace the archived series of tables from 2005 to 2009."
+4,"For the 2010 data, the lowest quartile is defined as less than or equal to $30,000, the second quartile is from $30,000 to $50,000, the third quartile is from $50,000 to $87,000 and the highest quartile is $87,000 or higher. In order to obtain equal weighted counts in each category, cases with incomes equal to the category cut-offs were randomly assigned to one of the two categories on either side of the cut-off."
+5,"For the 2012 data, the lowest quartile is defined as less than or equal to $30,000, the second quartile is from $30,000 to $55,000, the third quartile is from $55,000 to $94,000 and the highest quartile is $94,000 or higher. In order to obtain equal weighted counts in each category, cases with incomes equal to the category cut-offs were randomly assigned to one of the two categories on either side of the cut-off."
+6,"Households are divided into quartiles or four equal groups based on household income, each representing 25% of the income distribution."
+7,"The respondent's highest level of education ever completed."
+
+"Dimension ID","Member ID","Attribute Key",Title,Label,"Long Label",Value
+
+

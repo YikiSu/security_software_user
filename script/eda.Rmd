@@ -1,9 +1,65 @@
 ---
-title: "Exploratory data analysis"
+title: "Exploratory data analysis of the security software user dataset"
 output: github_document
+bibliography: ../doc/software_testing_refs.bib
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+library(tidyverse)
+library(feather)
+library(knitr)
+# library(infer)
+# library(janitor)
+# library(scales)
+# library(dplyr)
 ```
 
+# Summary of the dataset
+
+```{r load data}
+data <- read_feather("../result/data.feather")
+```
+
+The data set that I chose is from the Statistics Canada called "Internet security software use, by household income, age group and level of education", which can be found [here](https://open.canada.ca/data/en/dataset/6e45b085-1fbf-4ba4-881b-f4eebbb3764e). This data set consists of the responses from the 2018 Canadian Internet Use Survey (CIUS), which aims to collect information regarding the use of digital technologies and the online behaviors for Canadians who are over age 15 [@data]. This data set has 400 observations with 18 attributes. Each observations represents a survey response with information regarding the year of the security software usage status (2010 or 2012), the geographical location of the respondent, whether security software is used (free versions or paid versions), income level of the respondents, the proportion of users and etc. 
+
+```{r summary table1}
+table1 <- data %>% 
+    group_by(security_software_use) %>% 
+    summarise(average_proportion=mean(value, na.rm=TRUE))
+
+colnames(table1) <- c("Security Software Version", "Average Users Proportion")
+
+kable(table1, digits = 3,
+      caption = "Table 1. Average Proportion of Users per Security Software Version.") 
+
+```
+```{r summary table 2}
+table2 <- data %>% 
+    group_by(household_income_quartile) %>% 
+    summarise(avg=mean(value, na.rm=TRUE))
+
+colnames(table1) <- c("Income Level", "Average Users Proportion")
+
+kable(table2, digits = 3,
+      caption = "Table 2. Average Proportion of Users per Income Levels.") 
+```
+
+```{r plot 1}
+nest_df <- data %>%
+    group_by(security_software_use) %>% 
+    nest()
+
+group_ft <- function(sample, party, n){
+  sample %>% 
+    group_by(household_income_quartile) %>% 
+    summarise(avg=mean(value, na.rm=TRUE))
+}
+
+group_df <- nest_df %>% 
+  mutate(ave = map(data, ~group_ft(.)))
+
+```
+
+
+# References

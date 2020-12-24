@@ -38,8 +38,11 @@ The data set in this project is from the Statistics Canada called "Internet secu
 - **Value**: Percentage of all individuals aged 16 years old and over who responded to have used the Internet for personal non business use in the past twelve months from any location
 
 
+### Summary table
 
-### Summary Table for 2010
+Before any explanatory data analysis, I would like to see whether there is any differences between the percentage of users that used free versions of security software and of those who used paid versions of security software.
+
+#### Summary Table for 2010
 
 ```{r summary table1}
 
@@ -66,7 +69,7 @@ kable(table1, digits = 2,
 From the table above, the percentage of users that used security software in 2010 was 84.7%. There is not a significant difference between the percentage of users that used free version of security software and of that used paid version of security software. 
 
 
-### Summary Table for 2012
+#### Summary Table for 2012
 ```{r summary table 2}
 
 # create a table to display the average usage by each security software version

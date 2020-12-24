@@ -41,7 +41,14 @@ information regarding these features are:
     who responded to have used the Internet for personal non business
     use in the past twelve months from any location
 
-### Summary Table for 2010
+### Summary table
+
+Before any explanatory data analysis, I would like to see whether there
+is any differences between the percentage of users that used free
+versions of security software and of those who used paid versions of
+security software.
+
+#### Summary Table for 2010
 
 | Security Software Version                                            | Average Users Proportion |
 |:---------------------------------------------------------------------|-------------------------:|
@@ -57,7 +64,7 @@ software in 2010 was 84.7%. There is not a significant difference
 between the percentage of users that used free version of security
 software and of that used paid version of security software.
 
-### Summary Table for 2012
+#### Summary Table for 2012
 
 | Security Software Version                                            | Average Users Proportion |
 |:---------------------------------------------------------------------|-------------------------:|

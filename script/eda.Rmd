@@ -21,36 +21,100 @@ library(knitr)
 data <- read_feather("../result/data.feather")
 ```
 
-The data set that I chose is from the Statistics Canada called "Internet security software use, by household income, age group and level of education", which can be found [here](https://open.canada.ca/data/en/dataset/6e45b085-1fbf-4ba4-881b-f4eebbb3764e). This data set consists of the responses from the 2018 Canadian Internet Use Survey (CIUS), which aims to collect information regarding the use of digital technologies and the online behaviors for Canadians who are over age 15 [@data]. This data set has 400 observations with 18 attributes. Each observations represents a survey response with information regarding the year of the security software usage status (2010 or 2012), the geographical location of the respondent, whether security software is used (free versions or paid versions), income level of the respondents, the proportion of users and etc. 
+The data set in this project is from the Statistics Canada called "Internet security software use, by household income, age group and level of education", which can be found [here](https://open.canada.ca/data/en/dataset/6e45b085-1fbf-4ba4-881b-f4eebbb3764e). This data set consists of the responses from the 2018 Canadian Internet Use Survey (CIUS), which aims to collect information regarding the use of digital technologies and the online behaviors for Canadians who are over age 15 [@data]. This field sample consists of 45,400 units of data and this data set is a summary data set from all survey responses. This data set has 400 observations with 18 attributes. Each observations represents a survey response with certain attribute regarding the year of the security software usage status, the education level, whether security software is used, income level, the proportion of users and etc. In this project, only two features will be used: `Security software use`, `Household income quartile`, `VALUE`. The information regarding these features are:
+
+- **Security software use**: `Internet users that currently use security software` or `Internet users that currently use free versions of security software`.
+
+- **Household income quartile**: 
+
+  + Highest quartile household income: $87,000 or higher for 2010 data and $94,000 or higher for 2012 data
+  
+  + Third quartile household income: $50,000 to $87,000 for 2010 data and $55,000 to $94,000 for 2012 data
+  
+  + Second quartile household income: $30,000 to $50,000 for 2010 data and $30,000 to $55,000 for 2012 data
+  
+  + Lowest quartile household income: less than or equal to $30,000
+  
+- **Value**: Percentage of all individuals aged 16 years old and over who responded to have used the Internet for personal non business use in the past twelve months from any location
+
+
+
+### Summary Table for 2010
 
 ```{r summary table1}
+
+# create a table to display the average usage by each security software version
 table1 <- data %>% 
     group_by(security_software_use) %>% 
-    summarise(average_proportion=mean(value, na.rm=TRUE))
+    filter(ref_date==2010) %>% 
+    filter(household_income_quartile=="Total, household income quartiles") %>% 
+    filter(age_group == "Total, Internet users aged 16 years and over") %>% 
+    filter(level_of_education=="Total, level of education") %>% 
+    summarise(average_proportion=mean(value, na.rm=TRUE)) 
+
+table1 <- rbind(tibble(security_software_use="Internet users that currently use paid versions of security software",
+                 average_proportion=table1$average_proportion[2]-table1$average_proportion[1]),
+                table1)
 
 colnames(table1) <- c("Security Software Version", "Average Users Proportion")
 
-kable(table1, digits = 3,
-      caption = "Table 1. Average Proportion of Users per Security Software Version.") 
+kable(table1, digits = 2,
+      caption = "Table 1. Average Proportion of Users per Security Software Version in 2010.") 
 
 ```
+
+From the table above, the percentage of users that used security software in 2010 was 84.7%. There is not a significant difference between the percentage of users that used free version of security software and of that used paid version of security software. 
+
+
+### Summary Table for 2012
 ```{r summary table 2}
+
+# create a table to display the average usage by each security software version
 table2 <- data %>% 
-    group_by(household_income_quartile) %>% 
-    summarise(avg=mean(value, na.rm=TRUE))
+    group_by(security_software_use) %>% 
+    filter(ref_date==2012) %>% 
+    filter(household_income_quartile=="Total, household income quartiles") %>% 
+    filter(age_group == "Total, Internet users aged 16 years and over") %>% 
+    filter(level_of_education=="Total, level of education") %>% 
+    summarise(average_proportion=mean(value, na.rm=TRUE)) 
 
-colnames(table1) <- c("Income Level", "Average Users Proportion")
+table2 <- rbind(tibble(security_software_use="Internet users that currently use paid versions of security software",
+                 average_proportion=table2$average_proportion[2]-table2$average_proportion[1]),
+                table2)
 
-kable(table2, digits = 3,
-      caption = "Table 2. Average Proportion of Users per Income Levels.") 
+colnames(table2) <- c("Security Software Version", "Average Users Proportion")
+
+kable(table2, digits = 2,
+      caption = "Table 2. Average Proportion of Users per Security Software Version in 2012.") 
+
 ```
 
-```{r plot 1}
-nest_df <- data %>%
+From the table above, the percentage of users that used security software in 2010 was 81.5%. The difference between the percentage of users that used free version of security software and of that used paid version of security software has increased. The percentage of users that used free versions for security software is roughly 12.1% higher than the percentage of users who used paid versions for security software.
+
+
+### Exploratory analysis on the training data set
+
+To check whether there is a difference between the percentage of users who used free versions of security software and of who used paid versions of security, I plotted the bar graphs of percentage of users of each groups for each household income quartiles. In doing this, I could see that overall, the percentage of users who used free versions of security software is higher than the percentage of users who used paid versions of security software. For both 2010 and 2012, it is clear that the percentage of users who used paid versions of security software rose as the income level increased. The difference of the percentage of users is different between different income levels.
+
+
+```{r plot 2010}
+
+# create a nested data frame to generate the plot
+nest_df <- data %>% 
+    filter(ref_date == 2010) %>% 
     group_by(security_software_use) %>% 
     nest()
 
-group_ft <- function(sample, party, n){
+#' Create average usage by each income group by each security software version
+#'
+#' @param sample data frame or tibble containing the data
+#'
+#' @return tibble containing the average usage by each groups
+#' @export
+#'
+#' @examples
+#' group_ft(data)
+group_ft <- function(sample){
   sample %>% 
     group_by(household_income_quartile) %>% 
     summarise(avg=mean(value, na.rm=TRUE))
@@ -59,7 +123,98 @@ group_ft <- function(sample, party, n){
 group_df <- nest_df %>% 
   mutate(ave = map(data, ~group_ft(.)))
 
+# create a data frame for the average usage by each income group for paid version of security software
+user_df <- group_df$ave[[1]] 
+colnames(user_df) <- c("household_income_quartile", "General")
+
+# create a data frame for the average usage by each income group for free version of security software
+free_df <- group_df$ave[[2]] 
+colnames(free_df) <- c("household_income_quartile", "Free")
+
+
+combined_df <- left_join(user_df, free_df) %>% 
+  mutate(Paid = General - Free) %>% 
+  pivot_longer(-household_income_quartile, names_to = "type", values_to = "avg") 
+
+
+plot_df <- combined_df %>% 
+  filter(type != "General") %>% 
+  filter(household_income_quartile != "Total, household income quartiles") %>% 
+  mutate(household_income_quartile=case_when(household_income_quartile == "Highest quartile household income" ~ "Highest quartile",
+                                             household_income_quartile == "Lowest quartile household income" ~ "Lowest quartile",
+                                             household_income_quartile == "Second quartile household income" ~ "Second quartile",
+                                             household_income_quartile == "Third quartile household income" ~ "Third quartile")) 
+
+
+ggplot(plot_df, aes(x=type, y=avg, fill=type)) + 
+    geom_bar(stat='identity') +
+    facet_wrap(~household_income_quartile, ncol=5, scales = 'free') +
+    labs(title = "Average Usage of each security software usage by income group in 2010", 
+         y = "Average Usage", 
+         x = "Security Software Version") +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    axis.title = element_text(face = "bold", size = 12),
+    legend.position = "none",
+    strip.text.x = element_text(face = "bold", size = 10)
+  ) 
+
 ```
+
+Figure 1. Distribution of percentage of users for each income levels in 2010.
+
+
+```{r plot 2012}
+
+# create a nested data frame to generate the plot
+nest_df2 <- data %>% 
+    filter(ref_date == 2012) %>% 
+    group_by(security_software_use) %>% 
+    nest()
+
+group_df2 <- nest_df2 %>% 
+  mutate(ave = map(data, ~group_ft(.)))
+
+# create a data frame for the average usage by each income group for paid version of security software
+user_df2 <- group_df2$ave[[1]] 
+colnames(user_df2) <- c("household_income_quartile", "General")
+
+# create a data frame for the average usage by each income group for free version of security software
+free_df2 <- group_df2$ave[[2]] 
+colnames(free_df2) <- c("household_income_quartile", "Free")
+
+
+combined_df2 <- left_join(user_df2, free_df2) %>% 
+  mutate(Paid = General - Free) %>% 
+  pivot_longer(-household_income_quartile, names_to = "type", values_to = "avg") 
+
+
+plot_df2 <- combined_df2 %>% 
+  filter(type != "General") %>% 
+  filter(household_income_quartile != "Total, household income quartiles") %>% 
+  mutate(household_income_quartile=case_when(household_income_quartile == "Highest quartile household income" ~ "Highest quartile",
+                                             household_income_quartile == "Lowest quartile household income" ~ "Lowest quartile",
+                                             household_income_quartile == "Second quartile household income" ~ "Second quartile",
+                                             household_income_quartile == "Third quartile household income" ~ "Third quartile")) 
+
+
+ggplot(plot_df2, aes(x=type, y=avg, fill=type)) + 
+    geom_bar(stat='identity') +
+    facet_wrap(~household_income_quartile, ncol=5, scales = 'free') +
+    labs(title = "Average Usage of each security software usage by income group in 2012", 
+         y = "Average Usage", 
+         x = "Security Software Version") +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    axis.title = element_text(face = "bold", size = 12),
+    legend.position = "none",
+    strip.text.x = element_text(face = "bold", size = 10)
+  ) 
+
+
+```
+
+Figure 2. Distribution of percentage of users for each income levels in 2012.
 
 
 # References

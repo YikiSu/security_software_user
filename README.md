@@ -58,15 +58,27 @@ of this project:
 
     Rscript script/download_data.R --url="https://www150.statcan.gc.ca/n1/tbl/csv/22100010-eng.zip" --out_path="data"
 
-    # Clean the raw data file:
+    # Clean the raw data:
 
     Rscript script/clean_data.R --input="data/22100010.csv" --out_path="result"
+
+    # Generate the EDA plot
+
+    Rscript script/eda.R --input="result/data.feather" --out_path="result"
 
 ## Dependencies
 
 -   R version 3.6.1 and R packages:
 
     -   docopt==0.7.1
+
+    -   tidyverse==1.3.0
+
+    -   feather==0.3.5
+
+    -   janitor==2.0.1
+
+    -   arrow==2.0.0
 
 # References
 

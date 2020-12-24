@@ -1,5 +1,5 @@
 # author: Zhanyi Su
-# date: 2020-12-22
+# date: 2020-12-23
 
 "This script takes in a feather file from the result folder and generate plots. At the end, save the plot data in a png file in the result folder.
 
@@ -12,6 +12,7 @@ Options:
 
 library(docopt)
 library(feather)
+library(tidyverse)
 
 
 opt <- docopt(doc)
@@ -86,6 +87,56 @@ main <- function(input, out_path) {
          width = 8, 
          height = 10)
   
+  # create distribution plot for 2012
+  nest_df2 <- data %>% 
+    filter(ref_date == 2012) %>% 
+    group_by(security_software_use) %>% 
+    nest()
+  
+  group_df2 <- nest_df2 %>% 
+    mutate(ave = map(data, ~group_ft(.)))
+  
+  # create a data frame for the average usage by each income group for paid version of security software
+  user_df2 <- group_df2$ave[[1]] 
+  colnames(user_df2) <- c("household_income_quartile", "General")
+  
+  # create a data frame for the average usage by each income group for free version of security software
+  free_df2 <- group_df2$ave[[2]] 
+  colnames(free_df2) <- c("household_income_quartile", "Free")
+  
+  
+  combined_df2 <- left_join(user_df2, free_df2) %>% 
+    mutate(Paid = General - Free) %>% 
+    pivot_longer(-household_income_quartile, names_to = "type", values_to = "avg") 
+  
+  
+  plot_df2 <- combined_df2 %>% 
+    filter(type != "General") %>% 
+    filter(household_income_quartile != "Total, household income quartiles") %>% 
+    mutate(household_income_quartile=case_when(household_income_quartile == "Highest quartile household income" ~ "Highest quartile",
+                                               household_income_quartile == "Lowest quartile household income" ~ "Lowest quartile",
+                                               household_income_quartile == "Second quartile household income" ~ "Second quartile",
+                                               household_income_quartile == "Third quartile household income" ~ "Third quartile")) 
+  
+  
+  plot2012 <- ggplot(plot_df2, aes(x=type, y=avg, fill=type)) + 
+    geom_bar(stat='identity') +
+    facet_wrap(~household_income_quartile, ncol=5, scales = 'free') +
+    labs(title = "Average Usage of each security software usage by income group in 2012", 
+         y = "Average Usage", 
+         x = "Security Software Version") +
+    theme(
+      plot.title = element_text(face = "bold", size = 12),
+      axis.title = element_text(face = "bold", size = 12),
+      legend.position = "none",
+      strip.text.x = element_text(face = "bold", size = 10)
+    ) 
+  
+  # save the 2012 plot to png files
+  ggsave(paste0(out_path, "/2012plot.png"), 
+         plot2012,
+         width = 8, 
+         height = 10)
   
   
 }

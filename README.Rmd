@@ -28,26 +28,23 @@ The data set in this project is from the Statistics Canada called "Internet secu
 - **Value**: Percentage of all individuals aged 16 years old and over who responded to have used the Internet for personal non business use in the past twelve months from any location
 
 
+## Report
+
+The explanatory data analysis report could be found [here](http://htmlpreview.github.io/?https://raw.githubusercontent.com/YikiSu/security_software_user/main/script/eda.html).
+
 
 ## Usage
 
-The replication of this project can be done by installing the following dependencies and running the following commands from the root directory of this project:
+To replicate the analysis, clone this GitHub repository, install the [dependencies](#dependencies) listed below, and run the following command at the command line/terminal from the root directory of this project:
 
 ```
+make all
+```
 
-# Download the raw data:
+To reset the repo to a clean state, with no intermediate or results files, run the following command at the command line/terminal from the root directory of this project:
 
-Rscript script/download_data.R --url="https://www150.statcan.gc.ca/n1/tbl/csv/22100010-eng.zip" --out_path="data"
-
-# Clean the raw data:
-
-Rscript script/clean_data.R --input="data/22100010.csv" --out_path="result"
-
-# Generate the EDA plot
-
-Rscript script/eda.R --input="result/data.feather" --out_path="result"
-
-
+```
+make clean
 ```
 
 

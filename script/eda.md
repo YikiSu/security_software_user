@@ -95,12 +95,12 @@ the percentage of users who used paid versions of security software rose
 as the income level increased. The difference of the percentage of users
 is different between different income levels.
 
-![](eda_files/figure-gfm/plot%202010-1.png)<!-- -->
+<img src="../result/2010plot.png" width="2400" />
 
 Figure 1. Distribution of percentage of users for each income levels in
 2010.
 
-![](eda_files/figure-gfm/plot%202012-1.png)<!-- -->
+<img src="../result/2012plot.png" width="2400" />
 
 Figure 2. Distribution of percentage of users for each income levels in
 2012.

@@ -98,65 +98,7 @@ To check whether there is a difference between the percentage of users who used 
 
 ```{r plot 2010}
 
-# create a nested data frame to generate the plot
-nest_df <- data %>% 
-    filter(ref_date == 2010) %>% 
-    group_by(security_software_use) %>% 
-    nest()
-
-#' Create average usage by each income group by each security software version
-#'
-#' @param sample data frame or tibble containing the data
-#'
-#' @return tibble containing the average usage by each groups
-#' @export
-#'
-#' @examples
-#' group_ft(data)
-group_ft <- function(sample){
-  sample %>% 
-    group_by(household_income_quartile) %>% 
-    summarise(avg=mean(value, na.rm=TRUE))
-}
-
-group_df <- nest_df %>% 
-  mutate(ave = map(data, ~group_ft(.)))
-
-# create a data frame for the average usage by each income group for paid version of security software
-user_df <- group_df$ave[[1]] 
-colnames(user_df) <- c("household_income_quartile", "General")
-
-# create a data frame for the average usage by each income group for free version of security software
-free_df <- group_df$ave[[2]] 
-colnames(free_df) <- c("household_income_quartile", "Free")
-
-
-combined_df <- left_join(user_df, free_df) %>% 
-  mutate(Paid = General - Free) %>% 
-  pivot_longer(-household_income_quartile, names_to = "type", values_to = "avg") 
-
-
-plot_df <- combined_df %>% 
-  filter(type != "General") %>% 
-  filter(household_income_quartile != "Total, household income quartiles") %>% 
-  mutate(household_income_quartile=case_when(household_income_quartile == "Highest quartile household income" ~ "Highest quartile",
-                                             household_income_quartile == "Lowest quartile household income" ~ "Lowest quartile",
-                                             household_income_quartile == "Second quartile household income" ~ "Second quartile",
-                                             household_income_quartile == "Third quartile household income" ~ "Third quartile")) 
-
-
-ggplot(plot_df, aes(x=type, y=avg, fill=type)) + 
-    geom_bar(stat='identity') +
-    facet_wrap(~household_income_quartile, ncol=5, scales = 'free') +
-    labs(title = "Average Usage of each security software usage by income group in 2010", 
-         y = "Average Usage", 
-         x = "Security Software Version") +
-  theme(
-    plot.title = element_text(face = "bold", size = 12),
-    axis.title = element_text(face = "bold", size = 12),
-    legend.position = "none",
-    strip.text.x = element_text(face = "bold", size = 10)
-  ) 
+knitr::include_graphics("../result/2010plot.png")
 
 ```
 
@@ -165,50 +107,7 @@ Figure 1. Distribution of percentage of users for each income levels in 2010.
 
 ```{r plot 2012}
 
-# create a nested data frame to generate the plot
-nest_df2 <- data %>% 
-    filter(ref_date == 2012) %>% 
-    group_by(security_software_use) %>% 
-    nest()
-
-group_df2 <- nest_df2 %>% 
-  mutate(ave = map(data, ~group_ft(.)))
-
-# create a data frame for the average usage by each income group for paid version of security software
-user_df2 <- group_df2$ave[[1]] 
-colnames(user_df2) <- c("household_income_quartile", "General")
-
-# create a data frame for the average usage by each income group for free version of security software
-free_df2 <- group_df2$ave[[2]] 
-colnames(free_df2) <- c("household_income_quartile", "Free")
-
-
-combined_df2 <- left_join(user_df2, free_df2) %>% 
-  mutate(Paid = General - Free) %>% 
-  pivot_longer(-household_income_quartile, names_to = "type", values_to = "avg") 
-
-
-plot_df2 <- combined_df2 %>% 
-  filter(type != "General") %>% 
-  filter(household_income_quartile != "Total, household income quartiles") %>% 
-  mutate(household_income_quartile=case_when(household_income_quartile == "Highest quartile household income" ~ "Highest quartile",
-                                             household_income_quartile == "Lowest quartile household income" ~ "Lowest quartile",
-                                             household_income_quartile == "Second quartile household income" ~ "Second quartile",
-                                             household_income_quartile == "Third quartile household income" ~ "Third quartile")) 
-
-
-ggplot(plot_df2, aes(x=type, y=avg, fill=type)) + 
-    geom_bar(stat='identity') +
-    facet_wrap(~household_income_quartile, ncol=5, scales = 'free') +
-    labs(title = "Average Usage of each security software usage by income group in 2012", 
-         y = "Average Usage", 
-         x = "Security Software Version") +
-  theme(
-    plot.title = element_text(face = "bold", size = 12),
-    axis.title = element_text(face = "bold", size = 12),
-    legend.position = "none",
-    strip.text.x = element_text(face = "bold", size = 10)
-  ) 
+knitr::include_graphics("../result/2012plot.png")
 
 
 ```
